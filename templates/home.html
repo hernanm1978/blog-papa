@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inicio — Mi Sitio{% endblock %}
+
+{% block content %}
+<section class="hero-section text-white text-center py-5">
+    <div class="container py-4">
+        <h1 class="display-4 fw-bold mb-3">Bienvenido a mi sitio</h1>
+        <p class="lead mb-4">Blog, libros y mi trayectoria profesional.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'blog:post_list' %}" class="btn btn-light btn-lg">
+                <i class="bi bi-journal-text me-2"></i>Leer el blog
+            </a>
+            <a href="{% url 'books:book_list' %}" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-book me-2"></i>Ver libros
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-journal-text text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Blog</h3>
+                    <p class="text-muted">Artículos, reflexiones y ensayos sobre distintos temas.</p>
+                    <a href="{% url 'blog:post_list' %}" class="btn btn-outline-primary btn-sm mt-2">Ver artículos</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-book text-success" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Libros</h3>
+                    <p class="text-muted">Biblioteca digital con libros disponibles para descargar.</p>
+                    <a href="{% url 'books:book_list' %}" class="btn btn-outline-success btn-sm mt-2">Ver biblioteca</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-person-lines-fill text-warning" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Currículum</h3>
+                    <p class="text-muted">Mi formación, experiencia y habilidades profesionales.</p>
+                    <a href="{% url 'cv:cv' %}" class="btn btn-outline-warning btn-sm mt-2">Ver CV</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

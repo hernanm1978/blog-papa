@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ book.title }} — Biblioteca{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'books:book_list' %}">Biblioteca</a></li>
+            <li class="breadcrumb-item active">{{ book.title|truncatechars:50 }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <!-- Imágenes del libro -->
+        <div class="col-md-4">
+            {% if book.cover_front or book.cover_back %}
+            <div class="sticky-top" style="top: 80px;">
+                {% if book.cover_front %}
+                <div class="mb-3 text-center">
+                    <p class="text-muted small fw-semibold mb-2"><i class="bi bi-image me-1"></i>Tapa</p>
+                    <img src="{{ book.cover_front.url }}" class="img-fluid rounded shadow"
+                         alt="Tapa de {{ book.title }}" style="max-height: 350px; object-fit: contain;">
+                </div>
+                {% endif %}
+                {% if book.cover_back %}
+                <div class="text-center">
+                    <p class="text-muted small fw-semibold mb-2"><i class="bi bi-image me-1"></i>Contratapa</p>
+                    <img src="{{ book.cover_back.url }}" class="img-fluid rounded shadow"
+                         alt="Contratapa de {{ book.title }}" style="max-height: 350px; object-fit: contain;">
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="bg-success bg-opacity-10 d-flex align-items-center justify-content-center rounded"
+                 style="height: 350px;">
+                <i class="bi bi-book text-success" style="font-size: 5rem; opacity: 0.4;"></i>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Información del libro -->
+        <div class="col-md-8">
+            <h1 class="fw-bold mb-2">{{ book.title }}</h1>
+
+            <div class="d-flex flex-wrap gap-3 text-muted mb-4">
+                <span><i class="bi bi-person me-1"></i><strong>{{ book.author }}</strong></span>
+                {% if book.published_year %}
+                <span><i class="bi bi-calendar3 me-1"></i>{{ book.published_year }}</span>
+                {% endif %}
+                {% if book.isbn %}
+                <span><i class="bi bi-upc me-1"></i>ISBN: {{ book.isbn }}</span>
+                {% endif %}
+            </div>
+
+            <div class="book-description mb-4">
+                {{ book.description|safe }}
+            </div>
+
+            <a href="{{ book.pdf_file.url }}" class="btn btn-success btn-lg" download>
+                <i class="bi bi-download me-2"></i>Descargar PDF
+            </a>
+            <a href="{% url 'books:book_list' %}" class="btn btn-outline-secondary ms-2">
+                <i class="bi bi-arrow-left me-1"></i>Volver
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

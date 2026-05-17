@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Currículum Vitae{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {% if not info %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>El currículum está siendo preparado.
+    </div>
+    {% else %}
+
+    <!-- Encabezado del CV -->
+    <div class="card border-0 shadow-sm mb-5">
+        <div class="card-body p-4 p-md-5">
+            <div class="row align-items-center g-4">
+                {% if info.profile_image %}
+                <div class="col-md-3 text-center">
+                    <img src="{{ info.profile_image.url }}" class="rounded-circle img-fluid shadow"
+                         style="width: 160px; height: 160px; object-fit: cover;" alt="{{ info.full_name }}">
+                </div>
+                {% endif %}
+                <div class="col-md-{% if info.profile_image %}9{% else %}12{% endif %}">
+                    <h1 class="fw-bold mb-1">{{ info.full_name }}</h1>
+                    {% if info.tagline %}
+                    <p class="lead text-primary mb-3">{{ info.tagline }}</p>
+                    {% endif %}
+                    <p class="text-muted mb-3">{{ info.bio }}</p>
+                    <div class="d-flex flex-wrap gap-3 text-muted small">
+                        {% if info.location %}
+                        <span><i class="bi bi-geo-alt me-1"></i>{{ info.location }}</span>
+                        {% endif %}
+                        {% if info.email %}
+                        <a href="mailto:{{ info.email }}" class="text-decoration-none text-muted">
+                            <i class="bi bi-envelope me-1"></i>{{ info.email }}
+                        </a>
+                        {% endif %}
+                        {% if info.phone %}
+                        <span><i class="bi bi-telephone me-1"></i>{{ info.phone }}</span>
+                        {% endif %}
+                    </div>
+                    {% if info.linkedin or info.twitter or info.website %}
+                    <div class="d-flex gap-2 mt-3">
+                        {% if info.linkedin %}
+                        <a href="{{ info.linkedin }}" target="_blank" rel="noopener"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-linkedin me-1"></i>LinkedIn
+                        </a>
+                        {% endif %}
+                        {% if info.twitter %}
+                        <a href="{{ info.twitter }}" target="_blank" rel="noopener"
+                           class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-twitter-x me-1"></i>Twitter
+                        </a>
+                        {% endif %}
+                        {% if info.website %}
+                        <a href="{{ info.website }}" target="_blank" rel="noopener"
+                           class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-globe me-1"></i>Sitio web
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Columna izquierda -->
+        <div class="col-lg-4">
+
+            <!-- Educación -->
+            {% if education %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 fw-bold pt-3">
+                    <i class="bi bi-mortarboard me-2 text-primary"></i>Educación
+                </div>
+                <div class="card-body">
+                    {% for edu in education %}
+                    <div class="{% if not forloop.last %}mb-4 pb-4 border-bottom{% endif %}">
+                        <h6 class="fw-bold mb-1">{{ edu.degree }}</h6>
+                        <p class="text-muted small mb-1">{{ edu.institution }}</p>
+                        {% if edu.field %}
+                        <p class="text-muted small mb-1"><em>{{ edu.field }}</em></p>
+                        {% endif %}
+                        <span class="badge bg-light text-dark">{{ edu.period }}</span>
+                        {% if edu.description %}
+                        <p class="small mt-2 mb-0 text-muted">{{ edu.description }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Habilidades -->
+            {% if skills %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 fw-bold pt-3">
+                    <i class="bi bi-star me-2 text-warning"></i>Habilidades
+                </div>
+                <div class="card-body">
+                    {% regroup skills by get_category_display as skill_groups %}
+                    {% for group in skill_groups %}
+                    <p class="small text-muted fw-semibold mb-2 mt-3">{{ group.grouper }}</p>
+                    {% for skill in group.list %}
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>{{ skill.name }}</span>
+                            <span class="text-muted">{{ skill.get_level_display }}</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar"
+                                 style="width: {{ skill.level_percent }}%"
+                                 aria-valuenow="{{ skill.level_percent }}"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Idiomas -->
+            {% if languages %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 fw-bold pt-3">
+                    <i class="bi bi-translate me-2 text-info"></i>Idiomas
+                </div>
+                <div class="card-body">
+                    {% for lang in languages %}
+                    <div class="d-flex justify-content-between align-items-center
+                                {% if not forloop.last %}border-bottom pb-2 mb-2{% endif %}">
+                        <span class="fw-semibold">{{ lang.name }}</span>
+                        <span class="badge bg-info text-dark">{{ lang.get_level_display }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-lg-8">
+
+            <!-- Experiencia -->
+            {% if experience %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 fw-bold pt-3">
+                    <i class="bi bi-briefcase me-2 text-success"></i>Experiencia
+                </div>
+                <div class="card-body">
+                    {% for exp in experience %}
+                    <div class="{% if not forloop.last %}mb-4 pb-4 border-bottom{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ exp.position }}</h6>
+                                <p class="text-primary mb-1">{{ exp.company }}</p>
+                            </div>
+                            <span class="badge bg-light text-dark">{{ exp.period }}</span>
+                        </div>
+                        <p class="text-muted small mb-0">{{ exp.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Publicaciones -->
+            {% if publications %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 fw-bold pt-3">
+                    <i class="bi bi-file-text me-2 text-danger"></i>Publicaciones
+                </div>
+                <div class="card-body">
+                    {% for pub in publications %}
+                    <div class="{% if not forloop.last %}mb-4 pb-4 border-bottom{% endif %}">
+                        <h6 class="fw-bold mb-1">
+                            {% if pub.url %}
+                            <a href="{{ pub.url }}" target="_blank" rel="noopener"
+                               class="text-decoration-none">{{ pub.title }}</a>
+                            {% else %}
+                            {{ pub.title }}
+                            {% endif %}
+                        </h6>
+                        <div class="d-flex gap-3 text-muted small mb-1">
+                            {% if pub.publisher %}
+                            <span><i class="bi bi-building me-1"></i>{{ pub.publisher }}</span>
+                            {% endif %}
+                            <span><i class="bi bi-calendar3 me-1"></i>{{ pub.year }}</span>
+                        </div>
+                        {% if pub.description %}
+                        <p class="small text-muted mb-0">{{ pub.description }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}

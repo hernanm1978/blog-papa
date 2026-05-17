@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} — Blog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <article>
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'blog:post_list' %}">Blog</a></li>
+                        {% if post.category %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a>
+                        </li>
+                        {% endif %}
+                        <li class="breadcrumb-item active">{{ post.title|truncatechars:40 }}</li>
+                    </ol>
+                </nav>
+
+                <!-- Categoría -->
+                {% if post.category %}
+                <a href="{{ post.category.get_absolute_url }}" class="badge bg-primary text-decoration-none mb-2">
+                    {{ post.category.name }}
+                </a>
+                {% endif %}
+
+                <h1 class="fw-bold mb-3">{{ post.title }}</h1>
+
+                <div class="d-flex align-items-center text-muted small mb-4 gap-3">
+                    <span><i class="bi bi-calendar3 me-1"></i>{{ post.published_at|date:"d \d\e F \d\e Y" }}</span>
+                    {% if post.updated_at != post.created_at %}
+                    <span><i class="bi bi-pencil me-1"></i>Actualizado {{ post.updated_at|date:"d/m/Y" }}</span>
+                    {% endif %}
+                </div>
+
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" class="img-fluid rounded mb-4 w-100"
+                     alt="{{ post.title }}" style="max-height: 450px; object-fit: cover;">
+                {% endif %}
+
+                <!-- Contenido -->
+                <div class="post-content">
+                    {{ post.content|safe }}
+                </div>
+
+                <!-- Etiquetas -->
+                {% with tags=post.tags.all %}
+                {% if tags %}
+                <div class="mt-4 pt-3 border-top">
+                    <i class="bi bi-tags me-2 text-muted"></i>
+                    {% for tag in tags %}
+                    <span class="badge bg-secondary me-1">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </article>
+
+            <!-- Artículos relacionados -->
+            {% if related_posts %}
+            <div class="mt-5">
+                <h3 class="h5 fw-bold mb-3">Artículos relacionados</h3>
+                <div class="row g-3">
+                    {% for related in related_posts %}
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100 hover-card">
+                            {% if related.featured_image %}
+                            <img src="{{ related.featured_image.url }}" class="card-img-top"
+                                 alt="{{ related.title }}" style="height: 120px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body p-3">
+                                <h6 class="card-title mb-1">
+                                    <a href="{{ related.get_absolute_url }}" class="text-decoration-none text-dark">
+                                        {{ related.title|truncatechars:50 }}
+                                    </a>
+                                </h6>
+                                <small class="text-muted">{{ related.published_at|date:"d/m/Y" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Volver al blog
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
