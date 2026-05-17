@@ -7,7 +7,7 @@ echo "==> Aplicando migraciones..."
 python3 manage.py migrate --noinput
 
 echo "==> Recolectando archivos estáticos..."
-python3 manage.py collectstatic --noinput --clear
+python3 manage.py collectstatic --noinput
 
 echo "==> Iniciando Apache..."
 exec apache2ctl -D FOREGROUND
