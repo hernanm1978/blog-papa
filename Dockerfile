@@ -9,6 +9,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     python3-pip \
     python3-dev \
     libmariadb-dev \
+    pkg-config \
     build-essential \
     apache2 \
     libapache2-mod-wsgi-py3 \
