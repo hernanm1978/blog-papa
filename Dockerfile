@@ -14,7 +14,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     libapache2-mod-wsgi-py3 \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /var/www/blog_papa
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
@@ -28,7 +28,7 @@ RUN a2dissite 000-default && \
     a2ensite django && \
     a2enmod wsgi headers
 
-RUN chown -R www-data:www-data /app/media
+RUN chown -R www-data:www-data /var/www/blog_papa/media
 
 EXPOSE 80
 
