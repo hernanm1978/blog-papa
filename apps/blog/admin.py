@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['status', 'category', 'created_at']
     search_fields = ['title', 'content', 'excerpt']
     prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'created_at'
+    #date_hierarchy = 'created_at'
     list_editable = ['status']
     fieldsets = (
         ('Contenido', {
