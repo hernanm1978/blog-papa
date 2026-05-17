@@ -2,6 +2,14 @@ from .base import *
 from decouple import config
 
 DEBUG = False
+CSRF_TRUSTED_ORIGINS = [
+    'http://192.168.1.198:8055',
+    'https://blog-papa.hmnet.com.ar',
+]
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
