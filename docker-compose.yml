@@ -6,6 +6,7 @@ services:
       - "8055:80"
     env_file: .env
     volumes:
+      - .:/var/www/blog_papa
       - media:/var/www/blog_papa/media
 
 volumes:
